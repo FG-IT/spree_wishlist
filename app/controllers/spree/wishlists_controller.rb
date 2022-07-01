@@ -1,7 +1,7 @@
-class Spree::WishlistsController < Spree::BaseController
+class Spree::WishlistsController < Spree::StoreController
   include Spree::Core::ControllerHelpers::Order
   helper 'spree/products'
-
+  before_action :authorize_wishlist
   before_action :find_wishlist, only: [:destroy, :show, :update, :edit]
 
   respond_to :html
@@ -13,7 +13,7 @@ class Spree::WishlistsController < Spree::BaseController
   end
 
   def index
-    @wishlists = spree_current_user.wishlists
+    @wishlists = try_spree_current_user.wishlists
     respond_with(@wishlist)
   end
 
@@ -31,7 +31,7 @@ class Spree::WishlistsController < Spree::BaseController
   end
 
   def default
-    @wishlist = spree_current_user.wishlist
+    @wishlist = try_spree_current_user.wishlist
     respond_with(@wishlist) do |format|
       format.html { render :show }
     end
@@ -52,6 +52,10 @@ class Spree::WishlistsController < Spree::BaseController
   end
 
   private
+
+  def authorize_wishlist
+    authorize! action_name, Spree::Wishlist
+  end
 
   def wishlist_attributes
     params.require(:wishlist).permit(:name, :is_default, :is_private)

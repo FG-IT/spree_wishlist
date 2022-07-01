@@ -1,3 +1,4 @@
+<div class="container  mt-5">
 <h1 class="row"><%= Spree.t(:editing_wishlist) %></h1>
 <%= form_for @wishlist do |f| %>
   <p><%= f.label :name, Spree.t(:name) %>:&nbsp;<%= f.text_field :name %></p>
@@ -7,3 +8,4 @@
   <%= Spree.t(:or) %>
   <%= link_to Spree.t(:delete_wishlist), @wishlist, method: :delete, data: { confirm: Spree.t(:are_you_sure_wishlist) }, class: 'button' %>
 <% end -%>
+</div>
